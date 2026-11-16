@@ -17,8 +17,16 @@ header{background:linear-gradient(120deg,var(--navy),var(--blue));color:#fff;pad
 <main class="wrap">
 <div class="notice"><b>Welcome to DOGame Hub!</b><br>Play any available game. After your first game launch, create your profile, add your bank details and unlock your referral link. Refer 10 people who launch games within the same week to qualify for the ₦10,000 reward. Each game launch costs ₦3,000.</div>
 <div class="stats"><div class="stat">🎮<b id="gameTotal">0</b><small>Games available</small></div><div class="stat">🚀<b id="launchTotal">0</b><small>My launches (this device)</small></div><div class="stat">🏆<b>₦10,000</b><small>Weekly referral reward</small></div></div>
-<h2>🎮 Explore games</h2><div class="grid" id="games"></div>
-<div class="panel"><h3>💙 How it works</h3><p style="font-size:13px;line-height:1.7">1. Choose and launch a game.<br>2. Create your profile after your first launch.<br>3. Add your active bank account details.<br>4. Copy and share your referral link.<br>5. Get 10 referred people to launch a game within one week to qualify for ₦10,000.</p><button class="btn green" onclick="window.open('https://chat.whatsapp.com/E41Fc9y1Qd35ZJEUg105gU','_blank')">Join our WhatsApp Community</button></div>
+<h2>🎮 Browse game categories</h2>
+<p style="font-size:13px;color:#667085;line-height:1.6">DOGame Hub is getting ready for new games. Categories will remain here as creators submit new games.</p>
+<div class="grid" id="games"></div>
+<div class="panel" style="text-align:center">
+  <div style="font-size:36px">🚀</div>
+  <h3>No games have been published yet</h3>
+  <p style="font-size:13px;line-height:1.6;color:#667085">The old sample games have been cleared. New games can now be proposed for review.</p>
+  <button class="btn blue" onclick="submitGameIdea()">Submit a game</button>
+</div>
+<div class="panel"><h3>💙 How it works</h3><p style="font-size:13px;line-height:1.7">1. Choose and launch a game.<br>2. Create your profile after your first launch.<br>3. Add your active bank account details.<br>4. Copy and share your referral link.<br>5. Get 10 referred people to launch a game within one week to qualify for ₦10,000.</p></div>
 <div class="footer">© <span id="year"></span> DOTGROUP · DOGame Hub<br>Games created by David Onyibo Okaka, Founder, DOTGROUP.</div></main>
 
 <div class="modal" id="accountModal"><div class="dialog"><div class="dialoghead"><h2 style="margin:0">My DOGame Account</h2><button class="close" onclick="closeModal('accountModal')">×</button></div><div id="accountContent"></div></div></div>
@@ -28,24 +36,42 @@ header{background:linear-gradient(120deg,var(--navy),var(--blue));color:#fff;pad
 <script>
 const ADMIN_PASSWORD="CHANGE_THIS_PASSWORD";
 const WA_ADMIN="2349024370617";
-const games=[
-{id:"maths",title:"DOTGROUP Maths Puzzle",emoji:"🧮",desc:"Solve quick maths challenges.",kind:"math"},
-{id:"memory",title:"Memory Match",emoji:"🧠",desc:"Find matching pairs and train your memory.",kind:"memory"},
-{id:"motor",title:"Motor Race",emoji:"🏍️",desc:"Race forward and build your distance.",kind:"tap"},
-{id:"divide",title:"Money Divide Challenge",emoji:"💙",desc:"Practise percentages and money skills.",kind:"divide"},
-{id:"animal",title:"Animal Discovery",emoji:"🐾",desc:"Discover animals and their names.",kind:"animal"},
-{id:"word",title:"Word & Spelling Challenge",emoji:"🔤",desc:"Complete words and practise spelling.",kind:"word"},
-{id:"colour",title:"Creative Colouring",emoji:"🎨",desc:"Explore colours and creativity.",kind:"colour"},
-{id:"penalty",title:"Penalty Kick",emoji:"⚽",desc:"Take a friendly penalty shot.",kind:"penalty"},
-{id:"maze",title:"Help DOBOT Find Home",emoji:"🤖",desc:"Guide the robot to its home.",kind:"maze"},
-{id:"music",title:"Afrobeats Rhythm Tap",emoji:"🥁",desc:"Tap along and count your rhythm.",kind:"tap"},
-{id:"city",title:"Build DOTGROUP City",emoji:"🏙️",desc:"Build a growing city.",kind:"city"},
-{id:"tap",title:"Tap Tap Reflex",emoji:"👆",desc:"Test your tapping speed.",kind:"tap"}
+const games=[];
+
+// Categories stay visible while the games area is empty.
+const gameCategories=[
+  {name:"Action & Adventure",icon:"🕹️",description:"Action, adventure and exploration games."},
+  {name:"Puzzle & Brain Games",icon:"🧩",description:"Puzzles, memory, logic and strategy games."},
+  {name:"Education & Learning",icon:"📚",description:"Learning games, quizzes and skill challenges."},
+  {name:"Sports & Racing",icon:"🏆",description:"Sports, racing and competition games."},
+  {name:"Creative & Music",icon:"🎨",description:"Art, music, rhythm and creative games."},
+  {name:"Other Games",icon:"🎮",description:"More games that do not fit the categories above."}
 ];
 const get=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}};
 const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 let user=get("dogame_user",null), launches=get("dogame_launches",[]), activeGame=null, score=0;
-function renderGames(){document.getElementById("games").innerHTML=games.map(g=>`<article class="card"><div class="art">${g.emoji}</div><div class="body"><h3>${g.title}</h3><p>${g.desc}</p><small>By David Onyibo Okaka · DOTGROUP</small><button class="btn blue" onclick="playGame('${g.id}')">▶ Launch Game</button></div></article>`).join("");document.getElementById("gameTotal").textContent=games.length;document.getElementById("launchTotal").textContent=launches.length}
+function renderGames(){
+  const box=document.getElementById("games");
+  box.innerHTML=gameCategories.map(cat=>`
+    <article class="card">
+      <div class="art">${cat.icon}</div>
+      <div class="body">
+        <h3>${cat.name}</h3>
+        <p>${cat.description}</p>
+        <small>Games available: 0</small>
+        <button class="btn soft" onclick="showCategory('${cat.name}')">View category</button>
+      </div>
+    </article>`).join("");
+  document.getElementById("gameTotal").textContent=games.length;
+  document.getElementById("launchTotal").textContent=launches.length;
+}
+function showCategory(name){
+  alert(name+" is currently empty. New games will appear here after they are reviewed and published.");
+}
+function submitGameIdea(){
+  const message="Hello DOGame Hub Admin. I would like to submit a new game for DOGame Hub. Please tell me how to submit the game, its title, category and game link.";
+  window.open("https://wa.me/"+WA_ADMIN+"?text="+encodeURIComponent(message),"_blank");
+}
 function openModal(id){if(id==="accountModal")renderAccount();document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}
 function playGame(id){activeGame=games.find(g=>g.id===id);if(!activeGame)return;score=0;document.getElementById("playTitle").textContent=activeGame.title;renderGameContent();openModal("playModal")}
 function closeGame(){closeModal("playModal");if(activeGame){launches.push({id:activeGame.id,time:Date.now()});set("dogame_launches",launches);renderGames();if(launches.length===1&&!user){setTimeout(()=>{openModal("accountModal");renderAccount()},250)}}}
@@ -64,7 +90,7 @@ function answer(ok){let r=document.getElementById("gameResult");if(ok){score++;r
 function colour(c){document.getElementById("gameContent").style.background=c==="red"?"#ffe4e6":c==="blue"?"#dbeafe":"#dcfce7"}
 function renderAccount(){let box=document.getElementById("accountContent");if(!user){box.innerHTML=launches.length?`<p>You have launched a game. Create your profile to continue.</p><div class="field"><label>Full name</label><input id="uName"></div><div class="field"><label>Username</label><input id="uUser"></div><div class="field"><label>WhatsApp number</label><input id="uPhone"></div><div class="field"><label>Bank name</label><input id="uBank"></div><div class="field"><label>Account name</label><input id="uAccountName"></div><div class="field"><label>Account number</label><input id="uAccountNo" inputmode="numeric"></div><button class="btn blue" onclick="saveProfile()">Save profile</button>`:`<p>Launch at least one game to unlock your profile, bank details and referral link.</p>`;return}
 let link=location.origin+location.pathname+"?ref="+encodeURIComponent(user.username),referrals=get("dogame_referrals",[]).filter(r=>r.ref===user.username&&sameWeek(r.time));
-box.innerHTML=`<p>Welcome, <b>${escapeHtml(user.name)}</b> (@${escapeHtml(user.username)})</p><p style="font-size:12px;color:#667085">Bank details: ${escapeHtml(user.bank)} · ${escapeHtml(user.accountName)} · ${escapeHtml(user.accountNo)}</p><h3>Your referral link</h3><div class="code" style="font-size:12px;letter-spacing:0">${link}</div><div class="row" style="margin-top:8px"><button class="btn soft" onclick="copyLink()">Copy link</button><button class="btn green" onclick="shareLink()">Share WhatsApp</button></div><h3 style="margin-top:20px">This week's referral progress</h3><b>${referrals.length} / 10 launched referrals</b><div class="progress"><div style="width:${Math.min(100,referrals.length*10)}%"></div></div><p style="font-size:12px">${referrals.length>=10?"You may contact admin for manual verification of the ₦10,000 reward.":"Get "+(10-referrals.length)+" more qualifying referrals this week."}</p><button class="btn green" onclick="window.open('https://wa.me/2349024370617?text='+encodeURIComponent('Hello, I want to verify my DOGame referral reward. Username: '+user.username),'_blank')">Contact admin on WhatsApp</button><p><button class="btn soft" onclick="window.open('https://chat.whatsapp.com/E41Fc9y1Qd35ZJEUg105gU','_blank')">Join WhatsApp Community</button></p>`}
+box.innerHTML=`<p>Welcome, <b>${escapeHtml(user.name)}</b> (@${escapeHtml(user.username)})</p><p style="font-size:12px;color:#667085">Bank details: ${escapeHtml(user.bank)} · ${escapeHtml(user.accountName)} · ${escapeHtml(user.accountNo)}</p><h3>Your referral link</h3><div class="code" style="font-size:12px;letter-spacing:0">${link}</div><div class="row" style="margin-top:8px"><button class="btn soft" onclick="copyLink()">Copy link</button><button class="btn green" onclick="shareLink()">Share WhatsApp</button></div><h3 style="margin-top:20px">This week's referral progress</h3><b>${referrals.length} / 10 launched referrals</b><div class="progress"><div style="width:${Math.min(100,referrals.length*10)}%"></div></div><p style="font-size:12px">${referrals.length>=10?"You may contact admin for manual verification of the ₦10,000 reward.":"Get "+(10-referrals.length)+" more qualifying referrals this week."}</p><button class="btn green" onclick="window.open('https://wa.me/2349024370617?text='+encodeURIComponent('Hello, I want to verify my DOGame referral reward. Username: '+user.username),'_blank')">Contact admin on WhatsApp</button><p><button class="btn soft" onclick="window.open('https://chat.whatsapp.com/E41Fc9y1Qd35ZJEUg105gU','_blank')">Join the Players’ WhatsApp Community</button></p>`}
 function saveProfile(){let name=document.getElementById("uName").value.trim(),username=document.getElementById("uUser").value.trim().toLowerCase().replace(/[^a-z0-9_]/g,""),phone=document.getElementById("uPhone").value.trim(),bank=document.getElementById("uBank").value.trim(),accountName=document.getElementById("uAccountName").value.trim(),accountNo=document.getElementById("uAccountNo").value.trim();if(!name||!username||!phone||!bank||!accountName||!accountNo){alert("Please complete every field.");return}user={name,username,phone,bank,accountName,accountNo};set("dogame_user",user);let ref=new URLSearchParams(location.search).get("ref");if(ref&&ref!==username){let all=get("dogame_referrals",[]);all.push({ref,time:Date.now(),newUser:username,launched:false});set("dogame_referrals",all)}renderAccount()}
 function copyLink(){let l=location.origin+location.pathname+"?ref="+encodeURIComponent(user.username);navigator.clipboard?.writeText(l).then(()=>alert("Referral link copied."),()=>prompt("Copy your link:",l))}
 function shareLink(){let l=location.origin+location.pathname+"?ref="+encodeURIComponent(user.username);window.open("https://wa.me/?text="+encodeURIComponent("Join DOGame Hub and play games: "+l))}
