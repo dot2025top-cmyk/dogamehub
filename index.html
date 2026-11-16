@@ -47,7 +47,8 @@ header h1{font-size:clamp(28px,5vw,43px);margin:25px 0 7px}header p{max-width:72
 
  <section id="categories">
   <h2>🎮 Browse game categories</h2>
-  <p class="hint">The categories are ready. New games will appear here after creators submit them and they are approved.</p>
+  <p class="hint">Search by game title, category or description. A game may appear in more than one category.</p>
+  <div class="field"><label for="gameSearch">Search games and categories</label><input id="gameSearch" type="search" placeholder="Try football, maths, puzzle, African..." oninput="renderSite()"></div>
   <div class="grid" id="categoryGrid"></div>
   <div id="publishedGames"></div>
   <div class="panel" id="emptyGames" style="text-align:center">
@@ -111,12 +112,26 @@ const ADMIN_PASSWORD="SStone@@2020";
 const WA_ADMIN="2349024370617";
 const COMMUNITY_URL="https://chat.whatsapp.com/E41Fc9y1Qd35ZJEUg105gU";
 const categories=[
- {name:"Action & Adventure",icon:"🕹️",desc:"Action, adventure and exploration games."},
- {name:"Puzzle & Brain Games",icon:"🧩",desc:"Puzzles, memory, logic and strategy games."},
- {name:"Education & Learning",icon:"📚",desc:"Learning games, quizzes and skill challenges."},
- {name:"Sports & Racing",icon:"🏆",desc:"Sports, racing and competition games."},
- {name:"Creative & Music",icon:"🎨",desc:"Art, music, rhythm and creative games."},
- {name:"Other Games",icon:"🎮",desc:"More games that do not fit the categories above."}
+ {name:"Educational Games",icon:"📚",desc:"Learn while you play: Maths, English, Science, History and Geography."},
+ {name:"Puzzle & Brain Games",icon:"🧩",desc:"Think, solve and remember: puzzles, Sudoku and riddles."},
+ {name:"Kids & Early Learning",icon:"🧸",desc:"For small children: ABC, numbers, colours, shapes and animals."},
+ {name:"Sports & Racing",icon:"🏆",desc:"Football, racing and athletics."},
+ {name:"Adventure & Exploration",icon:"🧭",desc:"Quests, discovery and stories."},
+ {name:"Building & Simulation",icon:"🏗️",desc:"Build a city, run a farm or shop, and cook food."},
+ {name:"Music & Rhythm",icon:"🎵",desc:"Piano, drums, singing and dance."},
+ {name:"Art & Creativity",icon:"🎨",desc:"Drawing, colouring and design."},
+ {name:"Strategy & Planning",icon:"♟️",desc:"Think before you move and plan well."},
+ {name:"Family & Multiplayer",icon:"👨‍👩‍👧‍👦",desc:"Games the whole family can play together."},
+ {name:"Casual & Fun",icon:"🎈",desc:"Quick, easy games with no stress."},
+ {name:"Business & Money Skills",icon:"💰",desc:"Learn money, budgeting, buying and selling."},
+ {name:"Coding & Technology",icon:"💻",desc:"Learn how computers work and try simple coding."},
+ {name:"Word & Language Games",icon:"🔤",desc:"Learn new words, spelling and languages."},
+ {name:"Memory & Focus Games",icon:"🧠",desc:"Train your brain to remember and focus."},
+ {name:"Action & Reflex",icon:"⚡",desc:"Fast hands and fast eyes."},
+ {name:"Nature & Animals",icon:"🌿",desc:"Learn about animals, plants and the environment."},
+ {name:"Culture & African Games",icon:"🌍",desc:"African stories, languages and culture."},
+ {name:"Health & Safety Games",icon:"🛟",desc:"Learn to stay safe, eat well and be healthy."},
+ {name:"DOTGROUP Specials",icon:"⭐",desc:"Special games from DOTGROUP only."}
 ];
 const get=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}};
 const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
@@ -170,7 +185,11 @@ function renderCreator(){
   <div class="success"><b>Welcome, ${esc(u.name)}!</b><br><span class="hint">Your creator account is ready.</span></div>
   <h3 style="margin-top:20px">Submit your HTML game</h3>
   <div class="field"><label>Game title</label><input id="gameName" placeholder="Enter your game title"></div>
-  <div class="field"><label>Game category</label><select id="gameCategory">${categories.map(c=>`<option>${c.name}</option>`).join("")}</select></div>
+  <div class="field"><label>Choose all categories that fit your game (you can select more than one)</label>
+  <div id="gameCategoryChoices" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:7px">
+   ${categories.map((c,i)=>`<label style="display:flex;align-items:center;gap:8px;padding:9px;border:1px solid var(--line);border-radius:10px;font-size:12px"><input type="checkbox" name="gameCategory" value="${c.name}" style="width:auto"> ${c.icon} ${c.name}</label>`).join("")}
+  </div>
+ </div>
   <div class="field"><label>Short game description</label><textarea id="gameDesc" placeholder="Tell players what your game is about"></textarea></div>
   <div class="field"><label>Choose your HTML game file (.html)</label><input id="gameFile" type="file" accept=".html,text/html" onchange="readGameFile(this)"></div>
   <p id="fileStatus" class="hint">Select one HTML file, preferably under 1 MB for this browser-only demo.</p>
@@ -193,15 +212,15 @@ function readGameFile(input){
 }
 function submitGame(){
  const u=currentCreator();if(!u){alert("Please sign in first.");return}
- const title=document.getElementById("gameName").value.trim(),category=document.getElementById("gameCategory").value,desc=document.getElementById("gameDesc").value.trim(),code=document.getElementById("approvalCode").value.trim().toUpperCase();
- if(!title||!desc||!uploadedHtml){alert("Enter the game title and description, and choose the HTML file.");return}
+ const title=document.getElementById("gameName").value.trim(),selectedCategories=[...document.querySelectorAll('input[name="gameCategory"]:checked')].map(x=>x.value),desc=document.getElementById("gameDesc").value.trim(),code=document.getElementById("approvalCode").value.trim().toUpperCase();
+ if(!title||!desc||!uploadedHtml||selectedCategories.length===0){alert("Enter the game title and description, choose at least one category, and select the HTML file.");return}
  const codes=get("dogame_approval_codes",[]),match=codes.find(c=>c.code===code&&c.type==="approval"&&!c.used);
  if(!match){alert("That approval code is invalid or has already been used. Please contact the admin on WhatsApp.");return}
  let games=get("dogame_published_games",[]);
- const game={id:"g"+Date.now(),title,category,desc,html:uploadedHtml,fileName:uploadedFileName,creator:u.username,creatorName:u.name,created:Date.now()};
+ const game={id:"g"+Date.now(),title,categories:selectedCategories,desc,html:uploadedHtml,fileName:uploadedFileName,creator:u.username,creatorName:u.name,created:Date.now()};
  games.push(game);set("dogame_published_games",games);
  match.used=true;match.usedBy=u.username;set("dogame_approval_codes",codes);
- let submissions=get("dogame_submissions",[]);submissions.push({id:game.id,title,category,fileName:uploadedFileName,creator:u.username,status:"approved",created:Date.now()});set("dogame_submissions",submissions);
+ let submissions=get("dogame_submissions",[]);submissions.push({id:game.id,title,categories:selectedCategories,fileName:uploadedFileName,creator:u.username,status:"approved",created:Date.now()});set("dogame_submissions",submissions);
  uploadedHtml=null;uploadedFileName="";renderCreator();renderSite();
  alert("Congratulations! Your game has been approved and published in this browser. Your referral link is now available.");
 }
@@ -232,15 +251,18 @@ function renderSite(){
  const games=get("dogame_published_games",[]);
  document.getElementById("gameTotal").textContent=games.length;
  document.getElementById("creatorTotal").textContent=get("dogame_creators",[]).length;
- document.getElementById("categoryGrid").innerHTML=categories.map(c=>{
-  const count=games.filter(g=>g.category===c.name).length;
+ const query=(document.getElementById("gameSearch")?.value||"").trim().toLowerCase();
+ const matchingGames=games.filter(g=>[g.title,g.desc,...(g.categories||[g.category||""])].join(" ").toLowerCase().includes(query));
+ const matchingCategories=categories.filter(c=>!query||c.name.toLowerCase().includes(query)||c.desc.toLowerCase().includes(query)||matchingGames.some(g=>(g.categories||[g.category||""]).includes(c.name)));
+ document.getElementById("categoryGrid").innerHTML=matchingCategories.map(c=>{
+  const count=games.filter(g=>(g.categories||[g.category||""]).includes(c.name)).length;
   return `<article class="card"><div class="art">${c.icon}</div><div class="body"><h3>${c.name}</h3><p>${c.desc}</p><small>Games available: ${count}</small><button class="btn soft" onclick="showCategory('${c.name.replace(/'/g,"\\'")}')">View category</button></div></article>`;
- }).join("");
- document.getElementById("emptyGames").classList.toggle("hidden",games.length>0);
- document.getElementById("publishedGames").innerHTML=games.length?`<h2>🌟 Published Games</h2><div class="grid">${games.map(g=>`<article class="card"><div class="art">🎮</div><div class="body"><h3>${esc(g.title)}</h3><p>${esc(g.desc)}</p><small>${esc(g.category)} · By ${esc(g.creatorName)}</small><button class="btn blue" onclick="launchGame('${g.id}')">Launch Game</button></div></article>`).join("")}</div>`:"";
+ }).join("")||'<p class="hint">No matching categories found.</p>';
+ document.getElementById("emptyGames").classList.toggle("hidden",games.length>0||query.length>0);
+ document.getElementById("publishedGames").innerHTML=matchingGames.length?`<h2>🌟 ${query?"Search results":"Published Games"}</h2><div class="grid">${matchingGames.map(g=>`<article class="card"><div class="art">🎮</div><div class="body"><h3>${esc(g.title)}</h3><p>${esc(g.desc)}</p><small>${esc((g.categories||[g.category||""]).join(" · "))} · By ${esc(g.creatorName)}</small><button class="btn blue" onclick="launchGame('${g.id}')">Launch Game</button></div></article>`).join("")}</div>`:(query?'<p class="hint">No games match your search yet.</p>':"");
 }
 function showCategory(name){
- const list=get("dogame_published_games",[]).filter(g=>g.category===name);
+ const list=get("dogame_published_games",[]).filter(g=>(g.categories||[g.category||""]).includes(name));
  alert(list.length?name+": "+list.map(g=>g.title).join(", "):name+" is currently empty. Approved games will appear here.");
 }
 function launchGame(id){
@@ -261,4 +283,4 @@ document.getElementById("year").textContent=new Date().getFullYear();
 renderSite();
 </script>
 </body>
-                       </html>
+                      </html>
