@@ -29,6 +29,7 @@ main{padding:0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:
 #player{position:fixed;inset:0;z-index:1000;background:#fff;display:none;flex-direction:column}#player.open{display:flex}.playerbar{min-height:56px;background:#073b9b;color:#fff;display:flex;align-items:center;gap:10px;padding:8px 12px}.playerbar strong{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.playerbar button{border:0;background:#fff;color:#0646b5;border-radius:20px;padding:10px 14px;font-weight:900}.player-meta{background:#101828;color:#fff;padding:6px 12px;font-size:11px;display:flex;justify-content:space-between}.framewrap{flex:1;background:#080d18}.framewrap iframe{width:100%;height:100%;border:0;background:#fff}.player-foot{padding:7px;text-align:center;background:#f4f6fa;color:#667;font-size:10px}
 #creator,#auth,#dashboard,#adminPanel{position:fixed;inset:0;z-index:900;background:#f4f7fc;display:none;overflow:auto;padding-bottom:30px}#creator.open,#auth.open,#dashboard.open,#adminPanel.open{display:block}.creator-head{position:sticky;top:0;background:linear-gradient(120deg,#052e78,#0758d8 60%,#e53945);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px}.creator-head h2{font-size:16px;margin:0;flex:1}.creator-head button{border:0;background:#fff;color:#16428b;border-radius:20px;padding:9px 13px;font-weight:900}.formwrap{max-width:850px;margin:18px auto;padding:0 14px}.panel{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px;margin-bottom:13px}.panel h3{margin:0 0 10px;font-size:15px}.field{margin:12px 0}.field label{display:block;font-size:12px;font-weight:850;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;border:1px solid #d9e1ee;border-radius:11px;padding:12px}.field textarea{min-height:95px}.hint{font-size:11px;color:var(--muted);line-height:1.5}.progress{height:12px;background:#e7ecf5;border-radius:20px;overflow:hidden;margin:8px 0}.progress div{height:100%;background:#0a9b59;width:0%}.congrats{background:#e6ffef;border:2px solid #0a9b59;padding:14px;border-radius:14px}.filelabel{display:block;border:2px dashed #0758d8;padding:16px;text-align:center;border-radius:12px;background:#f4f7ff;cursor:pointer}.codebox{background:#eef2ff;border:2px dashed #0758d8;padding:14px;border-radius:12px;text-align:center;font-size:20px;font-weight:900;letter-spacing:1px;margin:10px 0;word-break:break-all}.paybox{background:#fff8e7;border:2px dashed #f5b301;padding:14px;border-radius:14px}.locked{background:#fff0f0;border:1px solid #ffcccc;padding:12px;border-radius:12px;font-size:12px}.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}.chip{display:flex;gap:7px;align-items:center;border:1px solid #e0e7f2;border-radius:10px;padding:9px;font-size:11px;background:#fbfcff}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#14213d;color:#fff;padding:12px 18px;border-radius:20px;display:none;z-index:2000;font-weight:700}
+#syncBox{display:none;background:#e6ffef;border:1px solid #0a9b59;padding:10px 12px;border-radius:12px;font-size:12px;margin:12px 0}
 </style>
 </head>
 <body>
@@ -41,6 +42,7 @@ main{padding:0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:
 <div style="margin-top:12px;background:#ffe45c;color:#000;padding:10px 12px;border-radius:12px;font-size:12px;font-weight:800">🚀 Launch your game for ₦3,000 only! Create account → Upload game → Enter ANY Launch Code → Your game go live with YOUR full name.</div>
 </header>
 <main>
+<div id="syncBox">🔄 Syncing your games to internet... Please wait small.</div>
 <div class="stats"><div class="stat">🪙<strong id="coinCount">0</strong><span>Demo coins</span></div><div class="stat">🏆<strong id="scoreCount">0</strong><span>My score</span></div><div class="stat">🎮<strong id="gameCount">0</strong><span>Games available</span></div></div>
 <div class="toolbar"><h2>Explore games - 20 Categories</h2><span class="hint">Tap category to filter</span></div>
 <div class="tabs" id="tabs"></div><div class="grid" id="games"></div>
@@ -80,6 +82,7 @@ main{padding:0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:
 <div class="panel"><h3>Generate Launch Codes - Any Code Works For Any Person, Any Game</h3><p class="hint">No username, no game title. Just choose how many codes. Person must pay ₦3,000 first. Code na one-time use, e go expire immediately after use.</p>
 <div class="field"><label>How many codes? (1 - 20)</label><select id="codeCount"><option value="1">1 Code</option><option value="2">2 Codes</option><option value="3">3 Codes</option><option value="5">5 Codes</option><option value="10">10 Codes</option><option value="20">20 Codes</option></select></div>
 <button class="primary" style="width:100%;padding:14px" onclick="generateCodes()">🎟️ Generate Codes</button><div id="adminCodeBox"></div><p class="hint">Copy any code, send am to person for WhatsApp. Any code go work for any person, any game, once.</p></div>
+<div class="panel"><h3>🗑️ ALL GAMES - Admin Can Delete Any Game</h3><p class="hint">As Founder, you fit delete any person game from here. E go disappear for everybody.</p><div id="adminGamesList"></div></div>
 <div class="panel"><h3>🏆 This Week - People Wey Don Meet 10 Persons</h3><p class="hint">Username + count + WhatsApp + account details.</p><div id="weeklyLeaders"></div><button class="secondary" style="width:100%;padding:12px" onclick="loadAdmin()">Refresh Admin</button></div>
 <div class="panel"><h3>👥 All Users & Games (Live)</h3><div id="adminList"></div></div>
 </div></section>
@@ -109,33 +112,29 @@ main{padding:0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:
 const WA_NUMBER="2349024370617"; const WA_COMMUNITY="https://chat.whatsapp.com/E41Fc9y1Qd35ZJEUg105gU"; const ADMIN_USER="founder"; const ADMIN_PASS="SStone@@2020";
 const SUPABASE_URL="https://vzhapbndugbdwbzkjevy.supabase.co"; const SUPABASE_KEY="sb_publishable_-jaVBolgN0_EPe5z64xlaw_Y3FQozbI";
 const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-// 20 CATEGORIES - EXACT LIST
 const categoryData=[
-{id:"educational",name:"Educational Games",emoji:"📚",desc:"Learn while you play. Maths, English, Science, History, Geography. Eg: Maths Puzzle, Spelling Challenge"},
-{id:"puzzle",name:"Puzzle & Brain Games",emoji:"🧩",desc:"Think, solve, remember. Eg: Memory Match, Sudoku, Riddles"},
-{id:"kids",name:"Kids & Early Learning",emoji:"🧸",desc:"For small children. ABC, Numbers, Colours, Shapes, Animals. Eg: Animal Discovery, ABC Learning"},
-{id:"sports",name:"Sports & Racing",emoji:"⚽",desc:"Football, Racing, Athletics. Eg: Penalty Kick, Motor Race"},
-{id:"adventure",name:"Adventure & Exploration",emoji:"🧭",desc:"Quest, discovery, story. Eg: Help DOBOT Find Home, Treasure Hunt"},
-{id:"building",name:"Building & Simulation",emoji:"🏗️",desc:"Build city, farm, shop, cook food. Eg: Build City, Farm Life, Cooking Game"},
-{id:"music",name:"Music & Rhythm",emoji:"🎵",desc:"Piano, Drums, Sing, Dance. Eg: Afrobeats Rhythm Tap, Piano Play"},
-{id:"creative",name:"Art & Creativity",emoji:"🎨",desc:"Drawing, Colouring, Design. Eg: Creative Colouring, Drawing Pad"},
-{id:"strategy",name:"Strategy & Planning",emoji:"♟️",desc:"Think before you move, plan well. Eg: Chess, City Planning"},
-{id:"family",name:"Family & Multiplayer",emoji:"👨‍👩‍👧",desc:"Whole family fit play together. Eg: Family Quiz, 2-Player Race"},
-{id:"casual",name:"Casual & Fun",emoji:"🎈",desc:"Quick, easy, just for fun, no stress. Eg: Tap Tap Reflex, Balloon Pop"},
-{id:"business",name:"Business & Money Skills",emoji:"💼",desc:"Learn money, budget, buying and selling. Eg: Money Divide Challenge, Market Shop"},
-{id:"coding",name:"Coding & Technology",emoji:"💻",desc:"Learn how computer dey work, simple coding. Eg: Robot Maze, Coding Puzzle"},
-{id:"word",name:"Word & Language Games",emoji:"🔤",desc:"Learn new words, spelling, languages. Eg: Word Search, Spelling Bee"},
-{id:"memory",name:"Memory & Focus Games",emoji:"🧠",desc:"Train brain to remember and focus. Eg: Card Match, Pattern Game"},
-{id:"action",name:"Action & Reflex",emoji:"⚡",desc:"Fast hand, fast eye. Eg: Catch The Ball, Tap Tap"},
-{id:"nature",name:"Nature & Animals",emoji:"🐶",desc:"Learn animals, plants, environment. Eg: Animal Discovery, Farm Animals"},
-{id:"culture",name:"Culture & African Games",emoji:"🌍",desc:"African stories, languages, culture. Eg: African Geography, Local Tales"},
-{id:"health",name:"Health & Safety Games",emoji:"❤️",desc:"Learn to stay safe, eat well, be healthy. Eg: Healthy Food Game, Road Safety"},
-{id:"dotgroup",name:"DOTGROUP Specials",emoji:"💙",desc:"Special games from DOTGROUP only. Eg: DOTGROUP Maths, DOTGROUP Money Game"}
+{id:"educational",name:"Educational Games",emoji:"📚",desc:"Learn while you play. Maths, English, Science, History, Geography."},
+{id:"puzzle",name:"Puzzle & Brain Games",emoji:"🧩",desc:"Think, solve, remember."},
+{id:"kids",name:"Kids & Early Learning",emoji:"🧸",desc:"For small children. ABC, Numbers, Colours."},
+{id:"sports",name:"Sports & Racing",emoji:"⚽",desc:"Football, Racing, Athletics."},
+{id:"adventure",name:"Adventure & Exploration",emoji:"🧭",desc:"Quest, discovery, story."},
+{id:"building",name:"Building & Simulation",emoji:"🏗️",desc:"Build city, farm, shop."},
+{id:"music",name:"Music & Rhythm",emoji:"🎵",desc:"Piano, Drums, Sing, Dance."},
+{id:"creative",name:"Art & Creativity",emoji:"🎨",desc:"Drawing, Colouring, Design."},
+{id:"strategy",name:"Strategy & Planning",emoji:"♟️",desc:"Think before you move."},
+{id:"family",name:"Family & Multiplayer",emoji:"👨‍👩‍👧",desc:"Whole family fit play together."},
+{id:"casual",name:"Casual & Fun",emoji:"🎈",desc:"Quick, easy, just for fun."},
+{id:"business",name:"Business & Money Skills",emoji:"💼",desc:"Learn money, budget."},
+{id:"coding",name:"Coding & Technology",emoji:"💻",desc:"Learn how computer dey work."},
+{id:"word",name:"Word & Language Games",emoji:"🔤",desc:"Learn new words, spelling."},
+{id:"memory",name:"Memory & Focus Games",emoji:"🧠",desc:"Train brain to remember."},
+{id:"action",name:"Action & Reflex",emoji:"⚡",desc:"Fast hand, fast eye."},
+{id:"nature",name:"Nature & Animals",emoji:"🐶",desc:"Learn animals, plants."},
+{id:"culture",name:"Culture & African Games",emoji:"🌍",desc:"African stories, languages."},
+{id:"health",name:"Health & Safety Games",emoji:"❤️",desc:"Learn to stay safe, eat well."},
+{id:"dotgroup",name:"DOTGROUP Specials",emoji:"💙",desc:"Special games from DOTGROUP only."}
 ];
-// NO SAMPLE GAMES - DELETED AS REQUESTED. Only real user-launched games go show.
-const sampleGames=[];
-const gameTemplates={};
-let games=[...sampleGames,...JSON.parse(localStorage.getItem('dotgame_launched')||'[]')];
+let games=[];
 let drafts=JSON.parse(localStorage.getItem('dotgame_drafts')||'[]');
 let activeCategory="all",seconds=0,clock=null,currentDraftId=null;
 function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
@@ -150,10 +149,10 @@ function getCodes(){try{return JSON.parse(localStorage.getItem('dotgame_codes')|
 function saveCodes(c){localStorage.setItem('dotgame_codes',JSON.stringify(c))}
 function updateUserPill(){let u=getCurrentUser();document.getElementById('userPill').textContent=u?(u.isAdmin?'🛡️ Admin - founder':'👤 @'+u.username):'👤 Guest';if(u&&!u.isAdmin){let h=document.getElementById('creatorUserHint');if(h) h.textContent='You dey post as '+u.name+' (@'+u.username+') - Your FULL NAME go show as creator.'}}
 function renderTabs(){document.getElementById('tabs').innerHTML=[{id:'all',name:'All games',emoji:'🎮'},...categoryData].map(c=>`<button class="tab ${activeCategory===c.id?'active':''}" onclick="setCategory('${c.id}')">${c.emoji} ${c.name}</button>`).join('')}
-function renderGames(){let q=document.getElementById('search').value.toLowerCase().trim();let list=games.filter(g=>g.launched && (activeCategory==='all'||g.cats.includes(activeCategory))&&(!q||(g.title+' '+g.desc+' '+g.cats.join(' ')).toLowerCase().includes(q)));document.getElementById('gameCount').textContent=games.filter(g=>g.launched).length;if(!list.length){document.getElementById('games').innerHTML=`<div class="empty" style="grid-column:1/-1"><div style="font-size:50px">🎮</div><h3 style="margin:10px 0 5px">No games yet for ${activeCategory==='all'?'this hub':categoryData.find(c=>c.id===activeCategory)?.name||'this category'}</h3><p style="font-size:13px;line-height:1.5">Be the first to launch a game for this category!<br>Create account → Upload your game → Enter Launch Code (₦3,000) → Your game go show here with your full name.</p><button class="primary" onclick="openCreator()" style="margin-top:10px">+ Launch Your Game Now</button></div>`}else{document.getElementById('games').innerHTML=list.map(g=>`<article class="card"><div class="card-art">${safeText(g.emoji)}<small>${safeText(g.difficulty||'All levels')}</small></div><div class="card-content"><div class="tagrow">${g.cats.slice(0,3).map(id=>{let c=categoryData.find(x=>x.id===id);return c?`<span class="tag">${c.emoji} ${safeText(c.name)}</span>`:''}).join('')}</div><h3>${safeText(g.title)}</h3><p>${safeText(g.desc)}</p><div class="card-foot"><span class="owner">By ${safeText(g.ownerFull||g.owner||'DOTGROUP')}</span></div><button class="primary play" onclick="openGame('${safeText(g.id)}')">▶ PLAY GAME</button></div></article>`).join('')}renderTabs()}
+function renderGames(){let q=document.getElementById('search').value.toLowerCase().trim();let list=games.filter(g=>g.launched && (activeCategory==='all'||(g.cats||[]).includes(activeCategory))&&(!q||(g.title+' '+g.desc+' '+(g.cats||[]).join(' ')).toLowerCase().includes(q)));document.getElementById('gameCount').textContent=games.filter(g=>g.launched).length;if(!list.length){document.getElementById('games').innerHTML=`<div class="empty" style="grid-column:1/-1"><div style="font-size:50px">🎮</div><h3 style="margin:10px 0 5px">No games yet for ${activeCategory==='all'?'this hub':categoryData.find(c=>c.id===activeCategory)?.name||'this category'}</h3><p style="font-size:13px;line-height:1.5">Be the first to launch a game for this category!<br>Create account → Upload your game → Enter Launch Code (₦3,000) → Your game go show here with your full name.</p><button class="primary" onclick="openCreator()" style="margin-top:10px">+ Launch Your Game Now</button></div>`}else{document.getElementById('games').innerHTML=list.map(g=>`<article class="card"><div class="card-art">${safeText(g.emoji)}<small>${safeText(g.difficulty||'All levels')}</small></div><div class="card-content"><div class="tagrow">${(g.cats||[]).slice(0,3).map(id=>{let c=categoryData.find(x=>x.id===id);return c?`<span class="tag">${c.emoji} ${safeText(c.name)}</span>`:''}).join('')}</div><h3>${safeText(g.title)}</h3><p>${safeText(g.desc)}</p><div class="card-foot"><span class="owner">By ${safeText(g.ownerFull||g.owner||'DOTGROUP')}</span></div><button class="primary play" onclick="openGame('${safeText(g.id)}')">▶ PLAY GAME</button></div></article>`).join('')}renderTabs()}
 function setCategory(id){activeCategory=id;renderGames();document.getElementById('games').scrollIntoView({behavior:'smooth'})}
 function renderCategories(){document.getElementById('categories').innerHTML=categoryData.map(c=>`<button class="category" onclick="setCategory('${c.id}')"><span class="emoji">${c.emoji}</span><span><b>${safeText(c.name)}</b><small>${safeText(c.desc)}</small></span></button>`).join('')}
-function openGame(id){let g=games.find(x=>x.id===id);if(!g)return;document.getElementById('playingTitle').textContent=g.title+' • By '+(g.ownerFull||g.owner);document.getElementById('gameFrame').srcdoc=g.html||'<h2 style="text-align:center;padding:40px">Game not available</h2>';document.getElementById('player').classList.add('open');document.body.style.overflow='hidden';seconds=0;clearInterval(clock);updateClock();clock=setInterval(()=>{seconds++;updateClock()},1000)}
+function openGame(id){let g=games.find(x=>String(x.id)===String(id));if(!g)return;document.getElementById('playingTitle').textContent=g.title+' • By '+(g.ownerFull||g.owner);document.getElementById('gameFrame').srcdoc=g.html||'<h2 style="text-align:center;padding:40px">Game not available</h2>';document.getElementById('player').classList.add('open');document.body.style.overflow='hidden';seconds=0;clearInterval(clock);updateClock();clock=setInterval(()=>{seconds++;updateClock()},1000)}
 function updateClock(){document.getElementById('sessionTime').textContent=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0')}
 function closeGame(){document.getElementById('player').classList.remove('open');document.getElementById('gameFrame').srcdoc='';document.body.style.overflow='';clearInterval(clock)}
 function toggleFullscreen(){let p=document.getElementById('player');if(!document.fullscreenElement&&p.requestFullscreen)p.requestFullscreen().catch(()=>{});else if(document.exitFullscreen)document.exitFullscreen()}
@@ -172,14 +171,14 @@ document.getElementById('bankPanel').style.display=hasLaunch?'block':'none';
 if(hasLaunch){let link=location.origin+location.pathname+'?ref='+u.username;document.getElementById('dashLink').textContent=link;if(u.bank){document.getElementById('bankName').value=u.bank.bankName||'';document.getElementById('bankNum').value=u.bank.accountNumber||'';document.getElementById('bankAccName').value=u.bank.accountName||'';document.getElementById('bankSaved').textContent='✅ Bank saved: '+u.bank.bankName+' • '+u.bank.accountNumber+' • '+u.bank.accountName}}
 let refs=getReferrals(u.username);document.getElementById('weekCount').textContent=refs.length;document.getElementById('weekBar').style.width=Math.min(100,refs.length*10)+'%';document.getElementById('weekText').textContent=refs.length>=10?'You don complete am! Claim your ₦10,000 now.':'You still need '+(10-refs.length)+' persons this week to claim ₦10,000.';
 document.getElementById('claimBox').innerHTML=refs.length>=10?`<div class="congrats"><h3 style="margin:0">🎉 Congratulations!</h3><p style="font-size:13px;line-height:1.5">You don get 10 persons this week! You don qualify for ₦10,000. Click below to join WhatsApp Community and claim.</p><button class="greenbtn" style="width:100%;padding:14px" onclick="claimReward()">💬 Join WhatsApp Community & Claim ₦10,000</button></div>`:'<p class="hint">Share your link for WhatsApp, Facebook, TikTok, school group.</p>';
-let mine=games.filter(g=>g.creatorUser===u.username);let myDrafts=drafts.filter(d=>d.creatorUser===u.username);document.getElementById('myGamesList').innerHTML=(mine.length+myDrafts.length===0)?'<p class="hint">You never post game yet.</p>':mine.map(g=>`<div style="border:1px solid #e7ecf5;padding:10px;border-radius:10px;margin-bottom:8px"><b>${safeText(g.title)}</b> - ✅ LAUNCHED<br><button class="secondary" onclick="openGame('${g.id}')">Play</button></div>`).join('')+myDrafts.map(d=>`<div style="border:1px dashed #f5b301;padding:10px;border-radius:10px;margin-bottom:8px"><b>${safeText(d.title)}</b> - 🕐 DRAFT - Enter Launch Code to Launch<br><button class="primary" onclick="loadDraft('${d.id}')">Continue to Launch</button></div>`).join('');
+let mine=games.filter(g=>g.creatorUser===u.username);let myDrafts=drafts.filter(d=>d.creatorUser===u.username);document.getElementById('myGamesList').innerHTML=(mine.length+myDrafts.length===0)?'<p class="hint">You never post game yet.</p>':mine.map(g=>`<div style="border:1px solid #e7ecf5;padding:10px;border-radius:10px;margin-bottom:8px"><b>${safeText(g.title)}</b> - ✅ LAUNCHED<br><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><button class="secondary" onclick="openGame('${g.id}')">▶ Play</button><button class="danger" onclick="deleteMyGame('${g.id}')">🗑️ Delete My Game</button></div></div>`).join('')+myDrafts.map(d=>`<div style="border:1px dashed #f5b301;padding:10px;border-radius:10px;margin-bottom:8px"><b>${safeText(d.title)}</b> - 🕐 DRAFT<br><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><button class="primary" onclick="loadDraft('${d.id}')">Continue to Launch</button><button class="danger" onclick="deleteDraft('${d.id}')">🗑️ Delete Draft</button></div></div>`).join('');
 document.getElementById('dashboard').classList.add('open');document.body.style.overflow='hidden'}
 function closeDashboard(){document.getElementById('dashboard').classList.remove('open');document.body.style.overflow=''}
 function openAdmin(){document.getElementById('adminPanel').classList.add('open');document.body.style.overflow='hidden';loadAdmin()}
 function closeAdmin(){document.getElementById('adminPanel').classList.remove('open');document.body.style.overflow=''}
 function saveBank(){let u=getCurrentUser();if(!u) return;let b={bankName:document.getElementById('bankName').value.trim(),accountNumber:document.getElementById('bankNum').value.trim(),accountName:document.getElementById('bankAccName').value.trim()};if(!b.bankName||!b.accountNumber||!b.accountName) return toast('Fill all bank fields');u.bank=b;let users=getUsers();let idx=users.findIndex(x=>x.username===u.username);if(idx>=0){users[idx].bank=b;saveUsers(users)}localStorage.setItem('dotgame_current',JSON.stringify(u));document.getElementById('bankSaved').textContent='✅ Saved! We go send ₦10,000 to this account when you reach 10.';toast('Bank details saved!')}
 async function doSignup(){let name=document.getElementById('regName').value.trim(),user=document.getElementById('regUser').value.trim().replace('@','').toLowerCase(),phone=document.getElementById('regPhone').value.trim(),pass=document.getElementById('regPass').value;let msg=document.getElementById('authMsg');if(!name||!user||!phone||!pass){msg.textContent='Fill all fields.';return}if(user===ADMIN_USER){msg.textContent='This username na for admin only.';return}let users=getUsers();if(users.find(x=>x.username===user)){msg.textContent='That username don dey.';return}let myCode='DOG'+user.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6)+Math.floor(100+Math.random()*900);let newUser={name,username:user,phone,pass,referral_code:myCode,created:Date.now(),bank:null};users.push(newUser);saveUsers(users);localStorage.setItem('dotgame_current',JSON.stringify(newUser));let ref=localStorage.getItem('dotgame_pending_ref');if(ref && ref!==user){let all=JSON.parse(localStorage.getItem('dotgame_referrals')||'[]');all.push({referrer:ref,newUser:user,week:weekKey(),date:Date.now(),launched:false});localStorage.setItem('dotgame_referrals',JSON.stringify(all));localStorage.removeItem('dotgame_pending_ref')}
-try{await supabaseClient.from('dogame_profiles').insert([{username:user,phone,referral_code:myCode,referred_by:ref||null}]);if(ref) await supabaseClient.from('dogame_referrals').insert([{referrer_code:ref,new_username:user}]);}catch(e){}
+try{await supabaseClient.from('dogame_profiles').insert([{username:user,phone,referral_code:myCode,referred_by:ref||null,full_name:name}]);}catch(e){}
 msg.textContent='Account created! Welcome @'+user;updateUserPill();setTimeout(()=>{closeAuth();openDashboard()},600)}
 async function doLogin(){let user=document.getElementById('loginUser').value.trim().replace('@','').toLowerCase(),pass=document.getElementById('loginPass').value;let msg=document.getElementById('authMsg');if(user===ADMIN_USER && pass===ADMIN_PASS){let admin={name:'David Onyibo Okaka',username:'founder',phone:'0902 437 0617',isAdmin:true};localStorage.setItem('dotgame_current',JSON.stringify(admin));updateUserPill();closeAuth();openAdmin();return}let found=getUsers().find(x=>x.username===user && x.pass===pass);if(!found){msg.textContent='Wrong username or password.';return}localStorage.setItem('dotgame_current',JSON.stringify(found));updateUserPill();closeAuth();openDashboard()}
 function doLogout(){localStorage.removeItem('dotgame_current');updateUserPill();closeDashboard();closeAdmin();closeCreator();toast('You don logout.')}
@@ -191,7 +190,7 @@ function payOnWhatsApp(){let u=getCurrentUser();let title=document.getElementByI
 async function generateCodes(){let n=parseInt(document.getElementById('codeCount').value)||1;let newCodes=[];for(let i=0;i<n;i++){let c='DOGAME-'+Math.random().toString(36).slice(2,8).toUpperCase();newCodes.push(c);try{await supabaseClient.from('dogame_codes').insert([{code:c,amount:3000}]);}catch(e){}}let localCodes=getCodes();newCodes.forEach(c=>localCodes.push({code:c,used:false,createdAt:Date.now()}));saveCodes(localCodes);document.getElementById('adminCodeBox').innerHTML='<p class="hint">✅ '+n+' new codes generated. Any code works for any person, any game, once:</p>'+newCodes.map(c=>`<div class="codebox">${c} <button class="secondary" onclick="navigator.clipboard.writeText('${c}').then(()=>toast('Copied ${c}'))">Copy</button></div>`).join('')+'<button class="greenbtn" style="width:100%;padding:12px" onclick="shareCodes()">Share All Codes on WhatsApp</button>';window._lastCodes=newCodes;toast(n+' codes generated!')}
 function shareCodes(){let codes=window._lastCodes||[];window.open('https://wa.me/?text='+encodeURIComponent('Your DOGame Launch Codes (any code works once):\n'+codes.join('\n')),'_blank')}
 function renderCategoryChecks(){document.getElementById('categoryChecks').innerHTML=categoryData.map(c=>`<label class="chip"><input type="checkbox" name="gameCategory" value="${c.id}"> ${c.emoji} ${safeText(c.name)}</label>`).join('')}
-function readHtmlFile(input){let f=input.files[0];if(!f)return;let r=new FileReader();r.onload=e=>{document.getElementById('gameCode').value=e.target.result;document.getElementById('fileName').textContent='File loaded: '+f.name+' ('+Math.round(f.size/1024)+' KB)';previewCreatorGame()};r.readAsText(f)}
+function readHtmlFile(input){let f=input.files[0];if(!f)return;let r=new FileReader();r.onload=e=>{document.getElementById('gameCode').value=e.target.result;document.getElementById('fileName').textContent='File loaded: '+f.name+' ('+Math.round(f.size/1024)+' KB)';previewCreatorGame()};r.readAsText(f);r.readAsText(f)}
 function previewCreatorGame(){let code=document.getElementById('gameCode').value.trim();if(!code){document.getElementById('creatorMessage').textContent='Paste your game HTML first or upload file.';return}document.getElementById('preview').srcdoc=code;document.getElementById('creatorMessage').textContent='Preview loaded below.'}
 function collectGame(){let title=document.getElementById('gameName').value.trim(),desc=document.getElementById('gameDescription').value.trim(),code=document.getElementById('gameCode').value.trim(),cats=[...document.querySelectorAll('input[name="gameCategory"]:checked')].map(x=>x.value);if(!title||!desc||!code){document.getElementById('creatorMessage').textContent='Complete title, description and game code.';return null}if(!cats.length){document.getElementById('creatorMessage').textContent='Select at least one category.';return null}if(!['safe1','safe2','safe3','safe4'].every(id=>document.getElementById(id).checked)){document.getElementById('creatorMessage').textContent='Complete all 4 safety checks.';return null}let u=getCurrentUser();return {id:currentDraftId||'game-'+Date.now(),title,desc,emoji:document.getElementById('gameEmoji').value.trim()||'🎮',cats,owner:u.name,ownerFull:u.name+' , DOTGROUP Creator',creatorUser:u.username,difficulty:document.getElementById('difficulty').value,html:code,launched:false,created:Date.now()}}
 function saveDraft(){let g=collectGame();if(!g)return;drafts=drafts.filter(d=>d.id!==g.id);drafts.unshift(g);localStorage.setItem('dotgame_drafts',JSON.stringify(drafts));currentDraftId=g.id;document.getElementById('creatorMessage').textContent='Draft saved! Your game never launch yet. Enter Launch Code below to launch am.';document.getElementById('launchCode').scrollIntoView({behavior:'smooth'})}
@@ -203,20 +202,94 @@ let valid=false;
 try{let {data}=await supabaseClient.from('dogame_codes').select('*').eq('code',entered).eq('is_used',false).single();if(data){valid=true;await supabaseClient.from('dogame_codes').update({is_used:true,used_by:u.username}).eq('id',data.id)}}catch(e){}
 let localCodes=getCodes();let lc=localCodes.find(c=>c.code===entered&&!c.used);if(lc){valid=true;lc.used=true;lc.usedBy=u.username;saveCodes(localCodes)}
 if(!valid){document.getElementById('creatorMessage').textContent='This code is wrong or don use am before. E don expire. Contact admin for new code.';return}
-g.launched=true;g.paid=true;drafts=drafts.filter(d=>d.id!==g.id);localStorage.setItem('dotgame_drafts',JSON.stringify(drafts));let launched=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');launched.unshift(g);localStorage.setItem('dotgame_launched',JSON.stringify(launched));games.unshift(g);
+g.launched=true;g.paid=true;drafts=drafts.filter(d=>d.id!==g.id);localStorage.setItem('dotgame_drafts',JSON.stringify(drafts));
+let launchedLocal=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');launchedLocal.unshift(g);localStorage.setItem('dotgame_launched',JSON.stringify(launchedLocal));games.unshift(g);
+try{await supabaseClient.from('dogame_games').insert([{title:g.title,category:g.cats[0],description:g.desc,creator_username:u.username,creator_name:u.name,game_html:g.html,status:'live'}]);}catch(e){}
 let allRef=JSON.parse(localStorage.getItem('dotgame_referrals')||'[]');let myRef=allRef.find(r=>r.newUser===u.username);if(myRef){myRef.launched=true;myRef.week=weekKey();localStorage.setItem('dotgame_referrals',JSON.stringify(allRef))}
-try{await supabaseClient.from('dogame_games').insert([{title:g.title,category:g.cats[0],description:g.desc,creator_username:u.username,status:'live'}]);}catch(e){}
-renderGames();document.getElementById('creatorMessage').textContent='🎉 Congratulations! Your game don launch with your full name: '+u.name;setTimeout(()=>{closeCreator();openDashboard()},800)}
+renderGames();document.getElementById('creatorMessage').textContent='🎉 Congratulations! Your game don launch with your full name: '+u.name+' - E go show for everybody now!';setTimeout(()=>{closeCreator();openDashboard()},800)}
+// --- DELETE FUNCTIONS - OWNER + ADMIN ---
+async function deleteMyGame(id){
+  let g=games.find(x=>String(x.id)===String(id)); if(!g) return;
+  let u=getCurrentUser(); if(!u || g.creatorUser!==u.username) return toast('You no fit delete this game.');
+  if(!confirm('Are you sure you want to DELETE "'+g.title+'"? E go comot for everybody.')) return;
+  await deleteGameById(g);
+  toast('✅ Your game don delete.');
+  openDashboard();
+}
+async function deleteDraft(id){
+  if(!confirm('Delete this draft?')) return;
+  drafts=drafts.filter(d=>String(d.id)!==String(id));
+  localStorage.setItem('dotgame_drafts',JSON.stringify(drafts));
+  toast('Draft deleted.');
+  openDashboard();
+}
+async function deleteGameAdmin(id){
+  let g=games.find(x=>String(x.id)===String(id)); if(!g) return;
+  let u=getCurrentUser(); if(!u || !u.isAdmin) return toast('Admin only.');
+  if(!confirm('ADMIN: Delete "'+g.title+'" by '+(g.ownerFull||g.owner)+'? E go comot for everybody.')) return;
+  await deleteGameById(g);
+  toast('✅ Admin don delete '+g.title);
+  loadAdmin();
+}
+async function deleteGameById(g){
+  // 1. Delete from Supabase - by title + creator (so e comot for internet)
+  try{
+    if(String(g.id).startsWith('cloud-')){
+      let cloudId=String(g.id).replace('cloud-','');
+      await supabaseClient.from('dogame_games').delete().eq('id',cloudId);
+    } else {
+      await supabaseClient.from('dogame_games').delete().eq('title',g.title).eq('creator_username',g.creatorUser);
+    }
+  }catch(e){}
+  // 2. Also try delete by title only as backup
+  try{ await supabaseClient.from('dogame_games').delete().eq('title',g.title).eq('creator_username',g.creatorUser); }catch(e){}
+  // 3. Delete from local
+  games=games.filter(x=>String(x.id)!==String(g.id) && !(x.title===g.title && x.creatorUser===g.creatorUser));
+  let launchedLocal=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');
+  launchedLocal=launchedLocal.filter(x=>String(x.id)!==String(g.id) && !(x.title===g.title && x.creatorUser===g.creatorUser));
+  localStorage.setItem('dotgame_launched',JSON.stringify(launchedLocal));
+  drafts=drafts.filter(d=>!(d.title===g.title && d.creatorUser===g.creatorUser));
+  localStorage.setItem('dotgame_drafts',JSON.stringify(drafts));
+  renderGames();
+}
 async function loadAdmin(){
 let users=getUsers();let wk=weekKey();
 function countFor(username){return JSON.parse(localStorage.getItem('dotgame_referrals')||'[]').filter(r=>r.referrer===username && r.week===wk && r.launched).length}
 let leaders=users.filter(u=>countFor(u.username)>=10);
 document.getElementById('weeklyLeaders').innerHTML=leaders.length?leaders.map(u=>{let cnt=countFor(u.username);return `<div style="border:1px solid #ddd;border-radius:12px;padding:12px;margin:8px 0"><b>@${safeText(u.username)}</b> - ${safeText(u.name)} - <b>${cnt}/10 ✅</b><br>📱 WhatsApp: ${safeText(u.phone)}<br>🏦 Bank: ${u.bank?safeText(u.bank.bankName)+' • '+safeText(u.bank.accountNumber)+' • '+safeText(u.bank.accountName):'No bank yet'}<br><button class="greenbtn" onclick="window.open('https://wa.me/234${safeText(u.phone).replace(/[^0-9]/g,'').slice(-10)}','_blank')">Chat on WhatsApp</button></div>`}).join(''):'<p class="hint">Nobody don reach 10 this week yet.</p>';
 document.getElementById('adminList').innerHTML='<h4>All Users ('+users.length+')</h4>'+users.map(u=>{let cnt=countFor(u.username);return `<p style="font-size:12px">@${safeText(u.username)} - ${safeText(u.name)} - 📱 ${safeText(u.phone)} - Week Referrals (launched): ${cnt} - Bank: ${u.bank?safeText(u.bank.bankName)+' '+safeText(u.bank.accountNumber):'No bank'}</p>`}).join('')+'<h4 style="margin-top:15px">All Games ('+games.length+')</h4>'+games.map(g=>`<p style="font-size:12px">🎮 ${safeText(g.title)} - By ${safeText(g.ownerFull||g.owner)} - ${g.launched?'✅ Launched':'Draft'}</p>`).join('');
+// ADMIN GAMES LIST WITH DELETE
+document.getElementById('adminGamesList').innerHTML=games.length?games.map(g=>`<div style="border:1px solid #e7ecf5;padding:10px;border-radius:10px;margin-bottom:8px"><b>${safeText(g.title)}</b> - By ${safeText(g.ownerFull||g.owner)} (@${safeText(g.creatorUser||'')})<br><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><button class="secondary" onclick="openGame('${g.id}')">▶ Play</button><button class="danger" onclick="deleteGameAdmin('${g.id}')">🗑️ Admin Delete</button></div></div>`).join(''):'<p class="hint">No games yet.</p>';
 try{let {data:dbUsers}=await supabaseClient.from('dogame_profiles').select('*').order('created_at',{ascending:false}).limit(50);if(dbUsers&&dbUsers.length) document.getElementById('adminList').innerHTML+='<h4>Supabase Users (hmfi)</h4>'+dbUsers.map(u=>`<p style="font-size:12px">@${safeText(u.username)} - Ref: ${safeText(u.referral_code)} - Phone: ${safeText(u.phone||'')}</p>`).join('');}catch(e){}
+}
+async function loadGamesFromCloud(){
+  try{
+    let {data,error}=await supabaseClient.from('dogame_games').select('*').eq('status','live').order('id',{ascending:false});
+    if(error) throw error;
+    let cloudGames=(data||[]).map(r=>({id:'cloud-'+r.id,title:r.title,desc:r.description||'',emoji:'🎮',cats:[r.category||'casual'],owner:r.creator_name||r.creator_username,ownerFull:(r.creator_name||r.creator_username)+' , DOTGROUP Creator',creatorUser:r.creator_username,difficulty:'All levels',html:r.game_html||'',launched:true}));
+    let localGames=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');
+    let merged=[...cloudGames];
+    localGames.forEach(lg=>{if(!merged.find(m=>m.title===lg.title&&m.creatorUser===lg.creatorUser)) merged.push(lg)});
+    games=merged;
+    let needSync=localGames.filter(lg=>!cloudGames.find(c=>c.title===lg.title&&c.creatorUser===lg.creatorUser));
+    if(needSync.length){
+      document.getElementById('syncBox').style.display='block';
+      document.getElementById('syncBox').textContent='🔄 Syncing '+needSync.length+' game(s) to internet: '+needSync.map(g=>g.title).join(', ');
+      for(let g of needSync){
+        try{await supabaseClient.from('dogame_games').insert([{title:g.title,category:(g.cats||['casual'])[0],description:g.desc,creator_username:g.creatorUser,creator_name:g.owner,game_html:g.html,status:'live'}]);}catch(e){}
+      }
+      document.getElementById('syncBox').textContent='✅ Synced! Your games don show for everybody now.';
+      setTimeout(()=>document.getElementById('syncBox').style.display='none',4000);
+    }
+    renderGames();
+  }catch(e){
+    games=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');
+    renderGames();
+  }
 }
 let refOnLoad=getRefFromUrl();if(refOnLoad){localStorage.setItem('dotgame_pending_ref',refOnLoad)}
 renderCategoryChecks();renderCategories();renderGames();updateUserPill();
+loadGamesFromCloud();
 </script>
 </body>
-                                             </html>
+                     </html>
