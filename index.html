@@ -448,5 +448,26 @@ function hideRenewUntilLaunch(){
 setInterval(hideRenewUntilLaunch, 1000);
  
   </script>
+  <script>
+function copyAffLink(btn, gameName){
+  const u = localStorage.getItem('dotgroup_username') || 'Guest';
+  const link = location.origin + '/?game=' + encodeURIComponent(gameName) + '&ref=' + u + '_' + gameName.replace(/\s+/g,'');
+  navigator.clipboard.writeText(link);
+  btn.innerText = 'Copied!';
+}
+setInterval(()=>{
+  document.querySelectorAll('.card-foot button').forEach(b=>{
+    if(b.innerText.includes('Play') && !b.dataset.done){
+      b.dataset.done = 1;
+      const gameName = b.closest('.card')?.querySelector('h3')?.innerText || 'game';
+      const nb = document.createElement('button');
+      nb.innerText = 'Copy Affiliate Link';
+      nb.onclick = ()=> copyAffLink(nb, gameName);
+      b.after(nb);
+    }
+  });
+}, 1000);
+</script>
+</body>
 </body>
   </html>
