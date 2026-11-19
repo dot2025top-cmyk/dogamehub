@@ -76,7 +76,7 @@ main{padding:0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:
 <button onclick="document.getElementById('advertPage').style.display='none'">Back</button>
 </div>
 <script>
-function calcAdPrice(){var v=Number(document.getElementById('adViews').value||0);var c=Number(document.getElementById('adClicks').value||0);if(v>0&&v<1000)v=1000;var t=(v/1000)*2000+c*50;if(t>0&&t<2000)t=2000;var h=Math.floor(t/2);document.getElementById('adPriceBox').innerHTML='Total: ₦'+t.toLocaleString()+'<br>Inviter gets (50%): ₦'+h.toLocaleString()+'<br>Company gets (50%): ₦'+h.toLocaleString();}
+function calcAdPrice(){var v=Number(document.getElementById('adViews').value||0);var c=Number(document.getElementById('adClicks').value||0);if(v>0&&v<1000)v=1000;var t=(v/1000)*2000+c*50;if(t>0&&t<2000)t=2000;document.getElementById('adPriceBox').innerHTML='Amount to Pay: ₦'+t.toLocaleString();}
 function submitAdvert(){var f=document.getElementById('adFile').files[0];if(!f){document.getElementById('adMsg').textContent='Please upload banner or video first.';return;}var ref=localStorage.getItem('dogame_pending_ref')||'DIRECT';var list=JSON.parse(localStorage.getItem('dogame_adverts')||'[]');list.push({type:document.getElementById('adType').value,views:document.getElementById('adViews').value,clicks:document.getElementById('adClicks').value,inviter:ref,date:new Date().toISOString(),status:'pending'});localStorage.setItem('dogame_adverts',JSON.stringify(list));document.getElementById('adMsg').textContent='Advert received! Admin go approve am. Inviter: '+ref;}
 </script>
 <!-- END -->
