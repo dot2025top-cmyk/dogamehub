@@ -256,7 +256,7 @@ if(!valid){document.getElementById('creatorMessage').textContent='This code is w
 g.launched=true;g.paid=true;drafts=drafts.filter(d=>d.id!==g.id);localStorage.setItem('dotgame_drafts',JSON.stringify(drafts));
 let launchedLocal=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');launchedLocal.unshift(g);localStorage.setItem('dotgame_launched',JSON.stringify(launchedLocal));games.unshift(g);
 if(!getRenewal(u.username))setRenewal(u.username,Date.now());
-try{await supabaseClient.from('dogame_games').insert([{title:g.title,category:g.cats[0],description:g.desc,creator_username:u.username,creator_name:u.name,game_html:g.html,status:'live'}]);}catch(e){}
+try{await supabaseClient.from('dogame_games').insert([{title:g.title,category:g.cats[0],description:g.desc,creator_username:u.username,creator_name:u.name,game_html:g.html,status:'live'}]);}catch(e){ alert('Supabase save failed: ' + e.message); }
 let allRef=JSON.parse(localStorage.getItem('dotgame_referrals')||'[]');let myRef=allRef.find(r=>r.newUser===u.username);if(myRef){myRef.launched=true;myRef.week=weekKey();localStorage.setItem('dotgame_referrals',JSON.stringify(allRef))}
 renderGames();document.getElementById('creatorMessage').textContent='🎉 Congratulations! Your game don launch with your full name: '+u.name+' - E go show for everybody now!';setTimeout(()=>{closeCreator();openDashboard()},800)}
 async function deleteMyGame(id){let g=games.find(x=>String(x.id)===String(id));if(!g)return;let u=getCurrentUser();if(!u||g.creatorUser!==u.username)return toast('You no fit delete this game.');if(!confirm('Are you sure you want to DELETE "'+g.title+'"? E go comot for everybody.'))return;await deleteGameById(g);toast('✅ Your game don delete.');openDashboard()}
