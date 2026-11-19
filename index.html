@@ -57,6 +57,29 @@ main{padding:0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:
 <div class="panel" style="margin-top:10px"><h3>🏆 Game of the Day</h3><div id="gameOfDay">Loading...</div></div>
 <div class="panel"><h3>🏆 Leaderboard - Top Players</h3><div id="leaderboardHome">No players yet. Be the first!</div><button class="secondary" onclick="openDashboard()">See My Rank</button></div>
 <div class="panel"><h3>📢 Advertise With Us - Earn 50%</h3><p class="hint">Advertiser pays ₦2,000 per 1,000 views OR ₦50 per click. You get 50% as Affiliate. Dogame keeps 50%.</p><div id="advertBox" style="background:#f4f7fc;border:1px dashed #0758d8;padding:12px;border-radius:12px;text-align:center;font-size:12px">Your Advert Here - Contact Admin: 0902 437 0617</div><button class="greenbtn" style="margin-top:10px;width:100%" onclick="becomeAdvertAffiliate()">Get My Advert Affiliate Link</button><p class="hint" id="advertAffiliateOut"></p></div>
+  <!-- ADVERTISER PAGE - PASTE AFTER LINE 59 -->
+<button onclick="document.getElementById('advertPage').style.display='block';window.scrollTo(0,0)" style="width:100%;padding:12px;margin:10px 0;background:#0758d8;color:#fff;border:0;border-radius:10px">Advertise Now - Upload Banner / Video</button>
+<div id="advertPage" style="display:none;padding:14px;background:#fff;border-radius:12px">
+<h2>Advertise on Dogame</h2>
+<p>1,000 views = ₦2,000 | 1 click = ₦50 | Minimum ₦2,000</p>
+<label>Advert Type</label><br>
+<select id="adType" onchange="calcAdPrice()"><option value="banner">Banner Image</option><option value="video">Video Advert</option></select><br><br>
+<label>Upload Your Advert</label><br>
+<input type="file" id="adFile" accept="image/*,video/*"><br><br>
+<label>Views (min 1000)</label><br>
+<input type="number" id="adViews" value="1000" min="1000" oninput="calcAdPrice()"><br><br>
+<label>Clicks (0 if you no want)</label><br>
+<input type="number" id="adClicks" value="0" min="0" oninput="calcAdPrice()"><br><br>
+<div id="adPriceBox" style="background:#111;color:#fff;padding:10px;border-radius:8px">Total: ₦2,000<br>Inviter gets (50%): ₦1,000<br>Company gets (50%): ₦1,000</div><br>
+<button onclick="submitAdvert()">Pay & Submit Advert</button>
+<p id="adMsg"></p>
+<button onclick="document.getElementById('advertPage').style.display='none'">Back</button>
+</div>
+<script>
+function calcAdPrice(){var v=Number(document.getElementById('adViews').value||0);var c=Number(document.getElementById('adClicks').value||0);if(v>0&&v<1000)v=1000;var t=(v/1000)*2000+c*50;if(t>0&&t<2000)t=2000;var h=Math.floor(t/2);document.getElementById('adPriceBox').innerHTML='Total: ₦'+t.toLocaleString()+'<br>Inviter gets (50%): ₦'+h.toLocaleString()+'<br>Company gets (50%): ₦'+h.toLocaleString();}
+function submitAdvert(){var f=document.getElementById('adFile').files[0];if(!f){document.getElementById('adMsg').textContent='Please upload banner or video first.';return;}var ref=localStorage.getItem('dogame_pending_ref')||'DIRECT';var list=JSON.parse(localStorage.getItem('dogame_adverts')||'[]');list.push({type:document.getElementById('adType').value,views:document.getElementById('adViews').value,clicks:document.getElementById('adClicks').value,inviter:ref,date:new Date().toISOString(),status:'pending'});localStorage.setItem('dogame_adverts',JSON.stringify(list));document.getElementById('adMsg').textContent='Advert received! Admin go approve am. Inviter: '+ref;}
+</script>
+<!-- END -->
 <div class="toolbar"><h2>🔥 Most Popular Games</h2><span class="hint">Games wey people play pass</span></div>
 <div class="grid" id="popularGames"></div>
 <div class="toolbar"><h2>🆕 Latest Games</h2><span class="hint">Games wey just launch now now</span></div>
