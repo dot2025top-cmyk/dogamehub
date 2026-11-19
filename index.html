@@ -264,13 +264,25 @@ async function deleteDraft(id){if(!confirm('Delete this draft?'))return;drafts=d
 async function deleteGameAdmin(id){let g=games.find(x=>String(x.id)===String(id));if(!g)return;let u=getCurrentUser();if(!u||!u.isAdmin)return toast('Admin only.');if(!confirm('ADMIN: Delete "'+g.title+'" by '+(g.ownerFull||g.owner)+'? E go comot for everybody.'))return;await deleteGameById(g);toast('✅ Admin don delete '+g.title);loadAdmin()}
 async function deleteGameById(g){try{if(String(g.id).startsWith('cloud-')){let cloudId=String(g.id).replace('cloud-','');await supabaseClient.from('dogame_games').delete().eq('id',cloudId)}else{await supabaseClient.from('dogame_games').delete().eq('title',g.title).eq('creator_username',g.creatorUser)}}catch(e){}try{await supabaseClient.from('dogame_games').delete().eq('title',g.title).eq('creator_username',g.creatorUser)}catch(e){}games=games.filter(x=>String(x.id)!==String(g.id)&&!(x.title===g.title&&x.creatorUser===g.creatorUser));let launchedLocal=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');launchedLocal=launchedLocal.filter(x=>String(x.id)!==String(g.id)&&!(x.title===g.title&&x.creatorUser===g.creatorUser));localStorage.setItem('dotgame_launched',JSON.stringify(launchedLocal));drafts=drafts.filter(d=>!(d.title===g.title&&d.creatorUser===g.creatorUser));localStorage.setItem('dotgame_drafts',JSON.stringify(drafts));renderGames()}
 async function loadAdmin(){
+  let {data: users} = await supabaseClient.from('users').select('*');
+  let {data: games} = await supabaseClient.from('games').select('*');
+  users = users || [];
+  games = games || [];
+  // Update the numbers in Admin Panel
+  let allU = document.querySelectorAll('[id*=allUsers], [id*=AllUsers]');
+  let allG = document.querySelectorAll('[id*=allGames], [id*=AllGames]');
+  // Try to update by text - fallback
+  let adminBox = document.body.innerHTML;
+  // Save for display - we will render below
+  window._adminUsers = users;
+  window._adminGames = games;
+  // Direct update if your IDs are these:
   try{
-    let {data: users} = await supabaseClient.from('users').select('*');
-    let {data: games} = await supabaseClient.from('games').select('*');
-    console.log('ADMIN USERS:', users);
-    console.log('ADMIN GAMES:', games);
-  }catch(e){ console.log('admin error', e); }
-}
+    document.getElementById('adminAllUsers').innerText = 'All Users (' + users.length + ')';
+    document.getElementById('adminAllGames').innerText = 'All Games (' + games.length + ')';
+  }catch(e){}
+  console.log('ADMIN FROM SUPABASE:', users.length, games.length);
+  }
  async function loadGamesFromCloud(){try{let {data,error}=await supabaseClient.from('dogame_games').select('*').eq('status','live').order('id',{ascending:false});if(error)throw error;let cloudGames=(data||[]).map(r=>({id:'cloud-'+r.id,title:r.title,desc:r.description||'',emoji:'🎮',cats:[r.category||'casual'],owner:r.creator_name||r.creator_username,ownerFull:(r.creator_name||r.creator_username)+' , DOTGROUP Creator',creatorUser:r.creator_username,difficulty:'All levels',html:r.game_html||'',launched:true}));let localGames=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');let merged=[...cloudGames];localGames.forEach(lg=>{if(!merged.find(m=>m.title===lg.title&&m.creatorUser===lg.creatorUser))merged.push(lg)});games=merged;let needSync=localGames.filter(lg=>!cloudGames.find(c=>c.title===lg.title&&c.creatorUser===lg.creatorUser));if(needSync.length){document.getElementById('syncBox').style.display='block';document.getElementById('syncBox').textContent='🔄 Syncing '+needSync.length+' game(s) to internet: '+needSync.map(g=>g.title).join(', ');for(let g of needSync){try{await supabaseClient.from('dogame_games').insert([{title:g.title,category:(g.cats||['casual'])[0],description:g.desc,creator_username:g.creatorUser,creator_name:g.owner,game_html:g.html,status:'live'}]);}catch(e){}}document.getElementById('syncBox').textContent='✅ Synced! Your games don show for everybody now.';setTimeout(()=>document.getElementById('syncBox').style.display='none',4000)}renderGames();}catch(e){games=JSON.parse(localStorage.getItem('dotgame_launched')||'[]');renderGames();}}
 let refOnLoad=getRefFromUrl();if(refOnLoad){localStorage.setItem('dotgame_pending_ref',refOnLoad)}
 renderCategoryChecks();renderCategories();renderGames();updateUserPill();
