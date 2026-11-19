@@ -73,7 +73,9 @@ main{padding:0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:
 <input type="number" id="adClicks" value="0" min="0" oninput="calcAdPrice()"><br><br>
 <div id="adPriceBox" style="background:#111;color:#fff;padding:10px;border-radius:8px">Total: ₦2,000<br>Inviter gets (50%): ₦1,000<br>Company gets (50%): ₦1,000</div><br>
 <button onclick="submitAdvert()">Pay & Submit Advert</button>
-<p id="adMsg"></p>
+<button onclick="payAdvert(calcAdPrice(), document.getElementById('advEmail').value)" style="background:#00cc66;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;width:100%">
+  Pay & Publish Advert
+</button>
 <button onclick="document.getElementById('advertPage').style.display='none'">Back</button>
 </div>
 <script>
