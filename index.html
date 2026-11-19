@@ -312,5 +312,20 @@ let refOnLoad=getRefFromUrl();if(refOnLoad){localStorage.setItem('dotgame_pendin
 renderCategoryChecks();renderCategories();renderGames();updateUserPill();
 loadGamesFromCloud();
 </script>
+  <script>
+function payAdvert(amount, email){
+  let handler = PaystackPop.setup({
+    key: 'pk_live_55253ec1031a96f7bf0022146252708eb3feab29',
+    email: email,
+    amount: amount * 100,
+    currency: 'NGN',
+    callback: function(response){
+      alert('Payment successful! Advert don go live. Ref: ' + response.reference);
+    },
+    onClose: function(){ alert('You close am, no pay yet'); }
+  });
+  handler.openIframe();
+}
+</script>
 </body>
  </html>
