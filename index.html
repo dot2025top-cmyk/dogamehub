@@ -93,7 +93,7 @@ function submitAdvert(){var f=document.getElementById('adFile').files[0];if(!f){
 <div class="tabs" id="tabs"></div><div class="grid" id="games"></div>
 <div class="toolbar"><h2>Browse by category</h2><span class="hint">Tap any category to see only games for that category</span></div><div class="categories" id="categories"></div>
 <div class="notice"><b>💰 How to earn ₦10,000 every week</b><br>1. Launch at least 1 game first → you go unlock your referral link.<br>2. Put your bank details.<br>3. Get 10 persons to create account AND launch game with your link in 1 week.<br>4. Once you reach 10, click WhatsApp Community button to claim ₦10,000.<br><br><b>💙 How to launch:</b> 1. Create account 2. Upload HTML file 3. Pay, collect ANY Launch Code from admin 4. Enter code → game go launch with your full name.<br><br><b>💰 Player:</b> Play 1 game = 5 coins. 1,000 coins = ₦150. Cashout 2,000 coins = ₦300. Once per day per game. Guest gets 0.<br><b>🏆 Creator:</b> 10 unique players = 1,000 coins, 100 = 8,000, 1,000 = 50,000, 10,000 = 350,000, 100,000 = 1,500,000.</div>
-<div style="text-align:center;padding:10px;font-size:12px;color:#667">© DOTGROUP • Founded by David Onyibo Okaka • Blue • White • Red</div>
+<div style="text-align:center;padding:10px;font-size:12px;color:#667">© DOTGROUP</div>
 </main></div>
 <nav class="bottom"><button class="active" onclick="goHome(this)"><span>🏠</span>Home</button><button onclick="openCreator()"><span>➕</span>Create</button><button onclick="openDashboard()"><span>🪙</span>Wallet</button><button onclick="openDashboard()"><span>🏆</span>Leaders</button><button onclick="openDashboard()"><span>👤</span>Profile</button></nav>
 <section id="player"><div class="playerbar"><button onclick="closeGame()">← Back</button><strong id="playingTitle">Game</strong><span id="playerCoins">🪙 0</span><button onclick="toggleFullscreen()">⛶</button></div><div class="player-meta"><span>🎮 Enjoy your game</span><span id="sessionTime">00:00</span><span id="guestNotice"></span></div><div class="framewrap"><iframe id="gameFrame" sandbox="allow-scripts allow-pointer-lock"></iframe></div>
@@ -115,7 +115,27 @@ function submitAdvert(){var f=document.getElementById('adFile').files[0];if(!f){
 <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Your password"></div>
 <button class="secondary" style="width:100%;padding:14px" onclick="doLogin()">Login</button><p id="authMsg" class="hint"></p>
 </div></div></section>
+<!-- MARKETPLACE -->
+<div id="marketplace" style="padding:20px;background:#f5f5f5;margin-top:30px;border-radius:10px;">
+  <h2>🛒 Marketplace</h2>
+  <p>All games for sale dey here. No game below ₦3,000. Company go take 20%, seller go take 80%.</p>
 
+  <h3>Price Calculator</h3>
+  <label>Your Game Stars (0 to 5):</label><br>
+  <input type="number" id="gameStars" value="0" min="0" max="5" style="padding:8px;width:100px;">
+  <button onclick="calcPrice()" style="padding:8px;background:green;color:white;border:none;border-radius:5px;">Check My Price Range</button>
+  <p id="priceRange" style="font-weight:bold;"></p>
+
+  <label>Pick Your Price (₦):</label><br>
+  <input type="number" id="myPrice" placeholder="e.g. 5000" style="padding:8px;width:150px;">
+  <button onclick="calcShare()" style="padding:8px;background:orange;color:white;border:none;border-radius:5px;">See My Share</button>
+  <p id="shareResult"></p>
+
+  <h3>Games For Sale</h3>
+  <div id="marketList">
+    <p>No game yet. Be the first to launch for sale!</p>
+  </div>
+</div>
 <section id="dashboard"><div class="creator-head"><button onclick="closeDashboard()">← Back</button><h2>🏠 My Dashboard</h2><button onclick="doLogout()">Logout</button></div>
 <div class="formwrap">
 <div class="panel"><h3>Welcome, <span id="dashName">User</span> 👋 <span id="dashBadge"></span></h3>
@@ -188,28 +208,6 @@ function launchForSale(){
 <div class="panel"><h3>4. Preview & Rules</h3><p class="hint">✔ No hateful, sexual or graphic content.<br>✔ No gambling or real-money betting.<br>✔ I get permission to use all assets.<br>✔ I don test am on mobile.</p><label class="chip"><input type="checkbox" id="safe1"> No hateful content</label><label class="chip"><input type="checkbox" id="safe2"> No gambling</label><label class="chip"><input type="checkbox" id="safe3"> I get permission</label><label class="chip"><input type="checkbox" id="safe4"> I don test am on mobile</label></div>
 </div></section>
 <div id="toast"></div>
-<!-- MARKETPLACE -->
-<div id="marketplace" style="padding:20px;background:#f5f5f5;margin-top:30px;border-radius:10px;">
-  <h2>🛒 Marketplace</h2>
-  <p>All games for sale dey here. No game below ₦3,000. Company go take 20%, seller go take 80%.</p>
-
-  <h3>Price Calculator</h3>
-  <label>Your Game Stars (0 to 5):</label><br>
-  <input type="number" id="gameStars" value="0" min="0" max="5" style="padding:8px;width:100px;">
-  <button onclick="calcPrice()" style="padding:8px;background:green;color:white;border:none;border-radius:5px;">Check My Price Range</button>
-  <p id="priceRange" style="font-weight:bold;"></p>
-
-  <label>Pick Your Price (₦):</label><br>
-  <input type="number" id="myPrice" placeholder="e.g. 5000" style="padding:8px;width:150px;">
-  <button onclick="calcShare()" style="padding:8px;background:orange;color:white;border:none;border-radius:5px;">See My Share</button>
-  <p id="shareResult"></p>
-
-  <h3>Games For Sale</h3>
-  <div id="marketList">
-    <p>No game yet. Be the first to launch for sale!</p>
-  </div>
-</div>
-
 <script>
 function calcPrice(){
   var stars = parseInt(document.getElementById('gameStars').value) || 0;
@@ -450,4 +448,4 @@ setInterval(hideRenewUntilLaunch, 1000);
  
   </script>
 </body>
- </html>
+  </html>
