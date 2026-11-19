@@ -406,48 +406,5 @@ function hideRenewUntilLaunch(){
 setInterval(hideRenewUntilLaunch, 1000);
  
   </script>
-  <!-- MARKETPLACE -->
-<div id="marketplace" style="padding:20px;background:#f5f5f5;margin-top:30px;border-radius:10px;">
-  <h2>🛒 Marketplace</h2>
-  <p>All games for sale dey here. No game below ₦3,000. Company go take 20%, seller go take 80%.</p>
-
-  <h3>Price Calculator</h3>
-  <label>Your Game Stars (0 to 5):</label><br>
-  <input type="number" id="gameStars" value="0" min="0" max="5" style="padding:8px;width:100px;">
-  <button onclick="calcPrice()" style="padding:8px;background:green;color:white;border:none;border-radius:5px;">Check My Price Range</button>
-  <p id="priceRange" style="font-weight:bold;"></p>
-
-  <label>Pick Your Price (₦):</label><br>
-  <input type="number" id="myPrice" placeholder="e.g. 5000" style="padding:8px;width:150px;">
-  <button onclick="calcShare()" style="padding:8px;background:orange;color:white;border:none;border-radius:5px;">See My Share</button>
-  <p id="shareResult"></p>
-
-  <h3>Games For Sale</h3>
-  <div id="marketList">
-    <p>No game yet. Be the first to launch for sale!</p>
-  </div>
-</div>
-
-<script>
-function calcPrice(){
-  var stars = parseInt(document.getElementById('gameStars').value) || 0;
-  var min = 3000;
-  var max = 5000;
-  if(stars >= 5) max = 15000;
-  else if(stars >= 3) max = 8000;
-  else if(stars >= 1) max = 6000;
-  document.getElementById('priceRange').innerHTML = 'Your game fit sell between ₦' + min + ' to ₦' + max + '. Pick price inside this range.';
-}
-function calcShare(){
-  var price = parseInt(document.getElementById('myPrice').value) || 0;
-  if(price < 3000){
-    document.getElementById('shareResult').innerHTML = 'Price too low! No game below ₦3,000.';
-    return;
-  }
-  var company = price * 0.20;
-  var seller = price * 0.80;
-  document.getElementById('shareResult').innerHTML = 'If you sell for ₦' + price + ', you go collect ₦' + seller + ', company go collect ₦' + company + '.';
-}
-</script>
 </body>
  </html>
