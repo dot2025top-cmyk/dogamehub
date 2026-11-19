@@ -115,27 +115,6 @@ function submitAdvert(){var f=document.getElementById('adFile').files[0];if(!f){
 <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Your password"></div>
 <button class="secondary" style="width:100%;padding:14px" onclick="doLogin()">Login</button><p id="authMsg" class="hint"></p>
 </div></div></section>
-<!-- MARKETPLACE -->
-<div id="marketplace" style="padding:20px;background:#f5f5f5;margin-top:30px;border-radius:10px;">
-  <h2>🛒 Marketplace</h2>
-  <p>All games for sale dey here. No game below ₦3,000. Company go take 20%, seller go take 80%.</p>
-
-  <h3>Price Calculator</h3>
-  <label>Your Game Stars (0 to 5):</label><br>
-  <input type="number" id="gameStars" value="0" min="0" max="5" style="padding:8px;width:100px;">
-  <button onclick="calcPrice()" style="padding:8px;background:green;color:white;border:none;border-radius:5px;">Check My Price Range</button>
-  <p id="priceRange" style="font-weight:bold;"></p>
-
-  <label>Pick Your Price (₦):</label><br>
-  <input type="number" id="myPrice" placeholder="e.g. 5000" style="padding:8px;width:150px;">
-  <button onclick="calcShare()" style="padding:8px;background:orange;color:white;border:none;border-radius:5px;">See My Share</button>
-  <p id="shareResult"></p>
-
-  <h3>Games For Sale</h3>
-  <div id="marketList">
-    <p>No game yet. Be the first to launch for sale!</p>
-  </div>
-</div>
 <section id="dashboard"><div class="creator-head"><button onclick="closeDashboard()">← Back</button><h2>🏠 My Dashboard</h2><button onclick="doLogout()">Logout</button></div>
 <div class="formwrap">
 <div class="panel"><h3>Welcome, <span id="dashName">User</span> 👋 <span id="dashBadge"></span></h3>
@@ -372,6 +351,28 @@ let refOnLoad=getRefFromUrl();if(refOnLoad){localStorage.setItem('dotgame_pendin
 renderCategoryChecks();renderCategories();renderGames();updateUserPill();
 loadGamesFromCloud();
 </script>
+  <!-- MARKETPLACE -->
+<div id="marketplace" style="padding:20px;background:#f5f5f5;margin-top:30px;border-radius:10px;">
+  <h2>🛒 Marketplace</h2>
+  <p>All games for sale dey here. No game below ₦3,000. Company go take 20%, seller go take 80%.</p>
+
+  <h3>Price Calculator</h3>
+  <label>Your Game Stars (0 to 5):</label><br>
+  <input type="number" id="gameStars" value="0" min="0" max="5" style="padding:8px;width:100px;">
+  <button onclick="calcPrice()" style="padding:8px;background:green;color:white;border:none;border-radius:5px;">Check My Price Range</button>
+  <p id="priceRange" style="font-weight:bold;"></p>
+
+  <label>Pick Your Price (₦):</label><br>
+  <input type="number" id="myPrice" placeholder="e.g. 5000" style="padding:8px;width:150px;">
+  <button onclick="calcShare()" style="padding:8px;background:orange;color:white;border:none;border-radius:5px;">See My Share</button>
+  <p id="shareResult"></p>
+
+  <h3>Games For Sale</h3>
+  <div id="marketList">
+    <p>No game yet. Be the first to launch for sale!</p>
+  </div>
+</div>
+
   <script>
 function payAdvert(amount, email){
   let handler = PaystackPop.setup({
