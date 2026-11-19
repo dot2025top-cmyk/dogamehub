@@ -367,6 +367,26 @@ function checkAccountRenew(){
   }
 }
 checkAccountRenew();
+    function hideRenewUntilLaunch(){
+  // Find Renewal box by its text, hide am if Games Launched = 0
+  let allDivs = document.querySelectorAll('div');
+  let renewBox = null;
+  for(let d of allDivs){
+    if(d.innerText && d.innerText.includes('Renewal - ₦1,500 Every 3 Months')){
+      renewBox = d;
+      break;
+    }
+  }
+  if(!renewBox) return;
+  let m = document.body.innerText.match(/Games Launched:\s*(\d+)/);
+  let launched = m ? parseInt(m[1]) : 0;
+  if(launched < 1){
+    renewBox.style.display = 'none';
+  } else {
+    renewBox.style.display = '';
+  }
+}
+setInterval(hideRenewUntilLaunch, 1000);
      </script>
 </body>
  </html>
