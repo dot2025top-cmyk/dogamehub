@@ -329,5 +329,44 @@ function payAdvert(amount, email){
   handler.openIframe();
 }
 </script>
+  <script>
+function payRenew(){
+  let user = localStorage.getItem('dotgame_current');
+  let email = user + '@gmail.com';
+  let handler = PaystackPop.setup({
+    key: 'pk_live_55253ec1031a96f7bf0022146252708eb3feab29',
+    email: email,
+    amount: 1500 * 100,
+    currency: 'NGN',
+    callback: function(response){
+      let newDate = new Date();
+      newDate.setMonth(newDate.getMonth() + 3);
+      // Save am for THIS account only
+      localStorage.setItem('dotgame_renew_' + user, newDate.toString());
+      alert('Renewal successful! All your games don stay online for another 3 months. Ref: ' + response.reference);
+      location.reload();
+    },
+    onClose: function(){ alert('You no pay yet'); }
+  });
+  handler.openIframe();
+}
+
+function checkAccountRenew(){
+  let user = localStorage.getItem('dotgame_current');
+  if(!user) return;
+  let key = 'dotgame_renew_' + user;
+  let until = localStorage.getItem(key);
+  if(!until){
+    let first = new Date();
+    first.setMonth(first.getMonth() + 3);
+    localStorage.setItem(key, first.toString());
+    return;
+  }
+  if(new Date() > new Date(until)){
+    document.body.innerHTML = '<div style="padding:30px;text-align:center;font-family:sans-serif"><h2>Your Account Don Expire</h2><p>All your games don go offline. Pay ₦1,500 to bring all of them back online for another 3 months</p><button onclick="payRenew()" style="background:#00cc66;color:white;padding:15px 25px;border:none;border-radius:10px;font-weight:bold">Pay ₦1,500 & Renew All My Games</button></div>';
+  }
+}
+checkAccountRenew();
+     </script>
 </body>
  </html>
