@@ -164,6 +164,23 @@ function submitAdvert(){var f=document.getElementById('adFile').files[0];if(!f){
 <div class="field"><label>Or paste your HTML game code *</label><textarea id="gameCode" style="min-height:140px" placeholder="Paste your HTML code here..."></textarea></div>
 <button class="secondary" style="width:100%;padding:12px" onclick="previewCreatorGame()">▶ Preview Game</button><iframe id="preview" style="width:100%;height:280px;border:1px solid #ddd;border-radius:12px;background:#fff;margin-top:10px"></iframe>
 <button class="secondary" style="width:100%;padding:12px;margin-top:10px" onclick="saveDraft()">Save Draft (Not Launched)</button><p class="hint" id="creatorMessage"></p></div>
+  <div style="display:flex; gap:10px; margin-bottom:10px;">
+  <button onclick="showWithCode()" style="flex:1; padding:12px; background:#22c55e; color:white; border:none; border-radius:10px; font-weight:bold;">Launch With Code</button>
+  <button onclick="launchForSale()" style="flex:1; padding:12px; background:#f59e0b; color:white; border:none; border-radius:10px; font-weight:bold;">Launch For Sale</button>
+</div>
+<div id="saleMsg" style="display:none; padding:10px; background:#fef3c7; border-radius:10px; margin-bottom:10px; font-weight:bold;"></div>
+  <script>
+function showWithCode(){
+  document.getElementById('saleMsg').style.display='none';
+  window.scrollTo(0, document.getElementById('saleMsg').offsetTop + 100);
+}
+function launchForSale(){
+  var m = document.getElementById('saleMsg');
+  m.style.display='block';
+  m.innerHTML = 'Your game is on sale! Share your game link to people so they go buy am. Money go go to your account number wey you don already put.';
+  alert('Your game is on sale! Share your game link to people so they go buy am.');
+}
+</script>
 <div class="panel"><h3>🔑 Step 4 - Enter Launch Code to Launch</h3><p class="hint">After you upload game, pay admin on WhatsApp, admin go send you ANY Launch Code. That code na for any person, any game, one-time use. Once you use am, e go expire.</p>
 <div class="paybox">Pay <b id="payAmount">₦3,000</b> to:<br>WhatsApp Admin: <b>0902 437 0617</b><br>Send receipt for WhatsApp, admin go send you code.<br><button class="greenbtn" style="margin-top:10px;width:100%;padding:12px" onclick="payOnWhatsApp()">💬 I Don Pay - Chat Admin on WhatsApp</button></div>
 <div class="field"><label>Enter Your Launch Code *</label><input id="launchCode" placeholder="e.g. DOGAME-XXXXXX"></div>
@@ -387,6 +404,7 @@ function hideRenewUntilLaunch(){
   }
 }
 setInterval(hideRenewUntilLaunch, 1000);
+ 
   </script>
 </body>
  </html>
